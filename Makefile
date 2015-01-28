@@ -38,6 +38,11 @@ LDFLAGS += -l glfw
 CFLAGS += -DGLFW
 endif
 
+ifdef SDL
+LDFLAGS += -l SDL2
+CFLAGS += -DSDL
+endif
+
 prefix 		?= /usr/local
 exec_prefix ?= $(prefix)
 bindir 		?= $(exec_prefix)/bin

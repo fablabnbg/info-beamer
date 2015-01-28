@@ -1163,12 +1163,12 @@ static void GLFWCALL reshape(int width, int height) {
 }
 
 static void GLFWCALL keypressed(int key, int action) {
-    if (action == GLFW_PRESS) {
+    if (action == PRESS) {
         switch (key) {
-            case GLFW_KEY_SPACE:
+            case KEY_SPACE:
                 node_profiler();
                 break;
-            case GLFW_KEY_ESC:
+            case KEY_ESC:
                 running = 0;
                 break;
         }
@@ -1439,7 +1439,7 @@ static void tick() {
 
     node_tree_gc(&root);
 
-    if (!glfwGetWindowParam(GLFW_OPENED))
+    if (!GetWindowParam(GLFW_OPENED))
         running = 0;
 }
 
@@ -1515,7 +1515,7 @@ int main(int argc, char *argv[]) {
     windowInit();
     OpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 
-    int mode = getenv("INFOBEAMER_FULLSCREEN") ? GLFW_FULLSCREEN : GLFW_WINDOW;
+    int mode = getenv("INFOBEAMER_FULLSCREEN") ? FULLSCREEN : WINDOW;
     int width = 1024;
     int height = 768;
 
@@ -1543,7 +1543,7 @@ int main(int argc, char *argv[]) {
     SetWindowSizeCallback(reshape);
     SetKeyCallback(keypressed);
 
-    if (mode == GLFW_FULLSCREEN)
+    if (mode == FULLSCREEN)
         windowDisable(GLFW_MOUSE_CURSOR);
 
     ilInit();
