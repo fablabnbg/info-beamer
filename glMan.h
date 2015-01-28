@@ -19,6 +19,7 @@
 #define SetWindowSizeCallback glfwSetWindowSizeCallback
 #define SetKeyCallback glfwSetKeyCallback
 #define windowDisable glfwDisable
+#define poll_events()
 
 #elif defined(SDL)
 #include <SDL2/SDL.h>
@@ -44,5 +45,28 @@ SDL_Renderer* renderer=NULL;
 #define SetWindowSizeCallback(A)
 #define SetKeyCallback(A)
 #define windowDisable(A)
+
+static void GLFWCALL reshape(int width, int height);
+static void GLFWCALL keypressed(int key, int action);
+
+void poll_events(){
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch(event.type){
+			case SDL_QUIT:
+				running=0;
+				break;
+			case SDL_WINDOWEVENT:
+				if (event.window.event==SDL_WINDOWEVENT_RESIZED){
+					reshape(event.window.data1,event.window.data2);
+				}
+				break;
+			case SDL_KEYDOWN:
+				keypressed(event.key.keysym.sym,PRESS);
+				break;
+		}
+	}
+}
 #endif
+
 #endif

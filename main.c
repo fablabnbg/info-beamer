@@ -2,6 +2,7 @@
 
 #define _BSD_SOURCE
 #define _GNU_SOURCE
+static int running = 1;
 #include <strings.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -138,7 +139,6 @@ typedef struct client_s {
 
 static int inotify_fd;
 static double now;
-static int running = 1;
 static int listen_port;
 
 GLuint default_tex; // white default texture
@@ -1412,6 +1412,8 @@ static void tick() {
 
     event_loop(EVLOOP_NONBLOCK);
 
+    poll_events();
+
     glEnable(GL_TEXTURE_2D);
 
     glEnable(GL_BLEND);
@@ -1531,6 +1533,7 @@ int main(int argc, char *argv[]) {
 
     if(!OpenWindow(width, height, 8,8,8,8, 0,0, mode))
         die("cannot open window");
+    reshape(width,height);
 
     GLenum err = glewInit();
     if (err != GLEW_OK)
