@@ -5,9 +5,9 @@
 #include <GL/glfw.h>
 #define FULLSCREEN GLFW_FULLSCREEN
 #define WINDOW GLFW_WINDOW
-#define PRESS GLFW_KEYDOWN
-#define SPACE GLFW_KEY_SPACE
-#define ESC GLFW_KEY_ESC
+#define PRESS GLFW_PRESS
+#define KEY_SPACE GLFW_KEY_SPACE
+#define KEY_ESC GLFW_KEY_ESC
 #define GetTime glfwGetTime
 #define SwapBuffers glfwSwapBuffers
 #define GetWindowParam glfwGetWindowParam
