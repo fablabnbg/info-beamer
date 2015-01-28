@@ -36,11 +36,14 @@ LDFLAGS += $(LUA_LDFLAGS) -levent -lGL -lGLU -lGLEW -lftgl -lIL -lILU -lavformat
 ifdef GLFW
 LDFLAGS += -l glfw
 CFLAGS += -DGLFW
-endif
+else 
 
 ifdef SDL
 LDFLAGS += -l SDL2
 CFLAGS += -DSDL
+else
+$(error Set either GLFW or SDL in environment)
+endif
 endif
 
 prefix 		?= /usr/local
