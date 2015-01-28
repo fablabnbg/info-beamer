@@ -23,7 +23,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
-#include <GL/glfw.h>
+#include "glMan.h"
 #include <IL/il.h>
 #include <IL/ilu.h>
 #include <libavformat/avformat.h>
@@ -1406,7 +1406,7 @@ static void open_tcp(struct event *event) {
 }
 
 static void tick() {
-    now = glfwGetTime();
+    now = GetTime();
 
     check_inotify();
 
@@ -1435,7 +1435,7 @@ static void tick() {
     glClear(GL_COLOR_BUFFER_BIT);
     node_render_self(&root, win_w, win_h);
 
-    glfwSwapBuffers();
+    SwapBuffers();
 
     node_tree_gc(&root);
 
@@ -1512,8 +1512,8 @@ int main(int argc, char *argv[]) {
     struct event tcp_event;
     open_tcp(&tcp_event);
 
-    glfwInit();
-    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
+    windowInit();
+    OpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 
     int mode = getenv("INFOBEAMER_FULLSCREEN") ? GLFW_FULLSCREEN : GLFW_WINDOW;
     int width = 1024;
@@ -1529,7 +1529,7 @@ int main(int argc, char *argv[]) {
 
     fprintf(stderr, INFO("initial size is %dx%d\n"), width, height);
 
-    if(!glfwOpenWindow(width, height, 8,8,8,8, 0,0, mode))
+    if(!OpenWindow(width, height, 8,8,8,8, 0,0, mode))
         die("cannot open window");
 
     GLenum err = glewInit();
@@ -1538,13 +1538,13 @@ int main(int argc, char *argv[]) {
     if (!glewIsSupported("GL_VERSION_3_0"))
         die("need opengl 3.0 support\n");
 
-    glfwSetWindowTitle(VERSION_STRING);
-    glfwSwapInterval(1);
-    glfwSetWindowSizeCallback(reshape);
-    glfwSetKeyCallback(keypressed);
+    SetWindowTitle(VERSION_STRING);
+    SwapInterval(1);
+    SetWindowSizeCallback(reshape);
+    SetKeyCallback(keypressed);
 
     if (mode == GLFW_FULLSCREEN)
-        glfwDisable(GLFW_MOUSE_CURSOR);
+        windowDisable(GLFW_MOUSE_CURSOR);
 
     ilInit();
     iluInit();
@@ -1553,7 +1553,7 @@ int main(int argc, char *argv[]) {
 
     init_default_texture();
 
-    now = glfwGetTime();
+    now = GetTime();
     node_init_root(&root, root_name);
 
     fprintf(stderr, INFO("initialization completed\n"));
