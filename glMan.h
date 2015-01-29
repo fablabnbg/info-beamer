@@ -24,7 +24,7 @@
 #elif defined(SDL)
 #include <SDL2/SDL.h>
 #define FULLSCREEN SDL_WINDOW_FULLSCREEN
-#define WINDOW SDL_WINDOW_MAXIMIZED
+#define WINDOW 0
 #define GLFWCALL
 #define GLFW_FSAA_SAMPLES 0
 #define GLFW_MOUSE_CURSOR 0
@@ -33,13 +33,32 @@
 #define KEY_SPACE SDLK_SPACE
 #define KEY_ESC SDLK_ESCAPE
 SDL_Window* window=NULL;
-SDL_Renderer* renderer=NULL;
+SDL_GLContext* glcontext=NULL;
 #define GetTime() (SDL_GetTicks()/1000.0)
 #define SwapBuffers() SDL_GL_SwapWindow(window)
 #define GetWindowParam(A) 1
 #define windowInit() SDL_Init(SDL_INIT_TIMER|SDL_INIT_VIDEO)
 #define OpenWindowHint(A,B)
-#define OpenWindow(WIDTH, HEIGHT, R,G,B,A,D,S,MODE) (!SDL_CreateWindowAndRenderer(WIDTH,HEIGHT,MODE|SDL_WINDOW_OPENGL,&window,&renderer))
+int OpenWindow(int WIDTH, int HEIGHT, int R,int G,int B,int A,int D,int S,int MODE){
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, R);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, G);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, B);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, A);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, D);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, S);
+
+   	window=SDL_CreateWindow("",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,WIDTH,HEIGHT,MODE|SDL_WINDOW_OPENGL);
+	if (!window){
+		fprintf(stderr, "Unable to create window: %s", SDL_GetError());
+		return 0;
+	}
+	glcontext = SDL_GL_CreateContext(window);
+	if (!glcontext){
+		fprintf(stderr, "Unable to create GL context: %s", SDL_GetError());
+		return 0;
+	}
+	return 1;
+}
 #define SetWindowTitle(A) SDL_SetWindowTitle(window,A)
 #define SwapInterval SDL_GL_SetSwapInterval
 #define SetWindowSizeCallback(A)
